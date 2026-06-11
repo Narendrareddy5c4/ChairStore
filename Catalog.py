@@ -579,7 +579,16 @@ def inject_all():
     chai = session.query(Chair).all()
     return dict(mychai=chai)
 
+@app.route('/admin')
+def admin():
+    if not login_session.get('email', None):
+        flash('Please sign in to access the admin panel')
+        return redirect(url_for('login'))
+    categories = session.query(Chair).all()
+    items = session.query(Items).all()
+    return render_template('Admin.html', categories=categories, items=items)
 
+app.secret_key = os.environ.get('SECRET_KEY', 'chair@123')
 if __name__ == '__main__':
-    app.secret_key = "chair@123"
-    app.run(debug=True, host="localhost", port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host="0.0.0.0", port=port)

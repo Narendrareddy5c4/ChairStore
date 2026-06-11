@@ -1,49 +1,54 @@
-{% extends 'HomePage.html' %}
+{% extends "base.html" %}
+{% block title %}Add New Chair{% endblock %}
 {% block content %}
-<div class="container">
-  <h2>New Item</h2>
-  <form method="post" action="{{url_for('additemnew',categoryid=cat_id)}}">
-    <div class="form-group">
-      <label>Name :</label>
-      <input type="text" class="form-control" id="email"  name="chairname" value='' required>
-    </div>
-    <div class="form-group">
-      <label>Image :</label>
-      <input type="text" class="form-control" value="{{chairimage}}" required name="chairimage">
-    </div>
-    <div class="form-group">
-      <label>Price :</label>($)
-      <input type="text" class="form-control" value="{{chairprice}}" required name="chairprice">
-    </div>
-    <div class="form-group">
-      <label>Weight :</label>(gm)
-      <input type="text" class="form-control"  value="{{chairbrand}}" required name="chairweight">
-    </div>
-    <div class="form-group">
-      <label>Brand :</label>
-      <input type="text" class="form-control" value="{{chairbrand}}" required name="chairbrand">
-    </div>
-  <div class="container">
-    <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-success">
-      Add Item
-    </button>
-    <div class="modal" id="myModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Click Here to add item</h4>
-            <button type="button" class="close" data-dismiss="modal"></button>
-          </div>
-          <div class="modal-footer">
-        	 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button> 
-	         <input type="submit"  class="btn btn-success" value="Add Item">
-          </div>
-        
+<div class="section" style="max-width:700px;">
+  <div class="breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><a href="/chairs/categorylist">Categories</a><span class="bc-sep">›</span>Add Item</div>
+  <div class="form-wrap">
+    <div style="font-size:36px;margin-bottom:14px;">🪑</div>
+    <div class="form-title">Add New Chair</div>
+    <div class="form-sub">List a new chair in this category. Fill in all details for the best visibility.</div>
+    <form method="POST">
+      <div class="form-group">
+        <label class="form-label">Chair Name *</label>
+        <input class="form-input" type="text" name="chairname" placeholder="e.g. ErgoMax Pro Executive Chair" required autofocus/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Price ($) *</label>
+          <input class="form-input" type="number" name="chairprice" placeholder="299" min="0" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Weight (kg) *</label>
+          <input class="form-input" type="number" name="chairweight" placeholder="12" min="0" step="0.1" required/>
         </div>
       </div>
-    </div>
-  
+      <div class="form-group">
+        <label class="form-label">Brand *</label>
+        <input class="form-input" type="text" name="chairbrand" placeholder="e.g. Herman Miller, IKEA, Secretlab..." required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Image URL</label>
+        <input class="form-input" type="url" name="chairimage" placeholder="https://example.com/chair-image.jpg"/>
+        <div style="font-size:11px;color:#9B9BAA;margin-top:4px;">Paste a direct image link. Leave blank to use default chair icon.</div>
+      </div>
+
+      <!-- PREVIEW -->
+      <div style="background:#F8F6F2;border-radius:12px;padding:16px;margin-bottom:20px;border:1px solid rgba(44,44,58,0.08);">
+        <div style="font-size:12px;font-weight:700;color:#6B6B80;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em;">📋 Listing Preview</div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:56px;height:56px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px;border:1px solid rgba(44,44,58,0.1);">🪑</div>
+          <div>
+            <div style="font-size:12px;color:#4A7FA5;font-weight:600;">Your new chair will appear here</div>
+            <div style="font-size:11px;color:#9B9BAA;margin-top:2px;">Fill in the form to see details</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-success btn-lg" type="submit">✅ List Chair</button>
+        <a class="btn btn-ghost btn-lg" href="/">Cancel</a>
+      </div>
+    </form>
   </div>
-</form>
 </div>
 {% endblock %}

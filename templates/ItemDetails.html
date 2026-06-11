@@ -1,18 +1,42 @@
-{% extends 'HomePage.html' %}
+{% extends "base.html" %}
+{% block title %}{{ infoname }}{% endblock %}
 {% block content %}
-<div class="container">
-<html>
-	<head>
-		<title>item details </title>
-	</head>
-	<body>
-		<h1>Item Details</h1>
-		<img src="{{infomage}}" alt="image error" height="300px", width="200px">
-		<h2 style="color: blue">{{infoname}}</h2>
-		<h3 >Price : Rs{{infoprice}}</h3>
-		<h3>Weight : {{infoweight}}grams</h3>
-		<h3>Brand : {{infobrand}}</h3>
-	</body>
-</html>
+<div class="section">
+  <div class="breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><a href="/chairs/categorylist">Categories</a><span class="bc-sep">›</span>{{ infoname }}</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
+    <!-- IMAGE -->
+    <div style="background:#fff;border-radius:16px;border:1px solid rgba(44,44,58,0.1);padding:40px;text-align:center;box-shadow:0 2px 12px rgba(44,44,58,0.06);">
+      {% if infomage and infomage.startswith('http') %}
+        <img src="{{ infomage }}" alt="{{ infoname }}" style="max-height:320px;object-fit:contain;"/>
+      {% else %}
+        <div style="font-size:140px;line-height:1;">🪑</div>
+      {% endif %}
+      <div style="margin-top:20px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+        <span class="badge badge-green">✅ In Stock</span>
+        <span class="badge badge-blue">🚚 Free Shipping</span>
+        <span class="badge badge-purple">⭐ Premium Quality</span>
+      </div>
+    </div>
+    <!-- INFO -->
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#4A7FA5;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">{{ infobrand }}</div>
+        <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,4vw,38px);font-weight:700;color:#2C2C3A;line-height:1.1;margin-bottom:8px;">{{ infoname }}</h1>
+        <div style="font-size:15px;color:#6B6B80;">by {{ infobrand }}</div>
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;color:#4A7FA5;">${{ infoprice }}</div>
+      <div style="background:#F8F6F2;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:14px;"><span style="color:#6B6B80;font-weight:500;">Brand</span><span style="color:#2C2C3A;font-weight:600;">{{ infobrand }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;border-top:1px solid rgba(44,44,58,0.08);padding-top:12px;"><span style="color:#6B6B80;font-weight:500;">Price</span><span style="color:#4A7FA5;font-weight:700;">${{ infoprice }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;border-top:1px solid rgba(44,44,58,0.08);padding-top:12px;"><span style="color:#6B6B80;font-weight:500;">Weight</span><span style="color:#2C2C3A;font-weight:600;">{{ infoweight }} kg</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;border-top:1px solid rgba(44,44,58,0.08);padding-top:12px;"><span style="color:#6B6B80;font-weight:500;">Availability</span><span style="color:#3A7A64;font-weight:600;">✅ In Stock</span></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-success btn-lg" onclick="alert('Added to cart! (Demo)')">🛒 Add to Cart</button>
+        <button class="btn btn-outline btn-lg" onclick="alert('Purchase flow coming soon!')">💳 Buy Now</button>
+      </div>
+      <a class="btn btn-ghost" href="javascript:history.back()">← Back</a>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -1,24 +1,100 @@
-{% extends 'HomePage.html' %}
+{% extends "base.html" %}
+{% block title %}Browse Chairs{% endblock %}
 {% block content %}
-{% if Items %}
-	<div class="container">
-		<div class="card-columns">
-		{% for i in Items %}
-		
-		 	<div class="card w-75">
-		 		<div class="card-header">
-		 			<a href="{{url_for('iteminfo',category_id=i.chair_id,itemid=i.item_id)}}"><img src="{{i.item_image}}" width="220px" height="200px"></a>
-		 		</div>
-		    	<div class="card-footer">
-		    		<h4 style="color:green;">{{i.item_name}}</h4>
-		    		<h4>{{i.item_price}}/-</h4>
-		    		<a href="{{url_for('itemupdate',categoryid=i.chair_id,itemid=i.item_id)}}"><h4>edit item</h4></a>
-				</div>
-		 	</div>
-		
-		{% endfor %}
-	</div>
-{% else %}
-	no items found
-{% endif %}
+
+<!-- HERO -->
+<div style="background:linear-gradient(135deg,#4A7FA5 0%,#2A5A80 100%);padding:72px 48px 56px;color:#fff;position:relative;overflow:hidden;">
+  <div style="position:absolute;right:-30px;top:-30px;font-size:240px;opacity:0.06;">🪑</div>
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600;margin-bottom:20px;">
+      🪑 Premium Chair Collection
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(36px,5vw,58px);font-weight:700;line-height:1.05;margin-bottom:14px;">Find Your Perfect<br>Chair Today</h1>
+    <p style="font-size:17px;opacity:0.85;max-width:480px;line-height:1.7;margin-bottom:32px;">Browse our curated collection of premium chairs — office, gaming, dining, lounge and more.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <a class="btn btn-lg" style="background:#fff;color:#4A7FA5;border-color:#fff;" href="/chairs/categorylist">📂 Browse Categories</a>
+      {% if session.get('email') %}
+      <a class="btn btn-lg" style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.3);" href="/admin">⚙️ Admin Panel</a>
+      {% else %}
+      <a class="btn btn-lg" style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.3);" href="/login">🔐 Sign In to Sell</a>
+      {% endif %}
+    </div>
+    <div style="display:flex;gap:36px;margin-top:40px;flex-wrap:wrap;">
+      <div><div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;">100+</div><div style="font-size:12px;opacity:0.75;">Premium Chairs</div></div>
+      <div><div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;">6+</div><div style="font-size:12px;opacity:0.75;">Categories</div></div>
+      <div><div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;">Free</div><div style="font-size:12px;opacity:0.75;">Shipping Available</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+
+  <!-- SECTION HEADER -->
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">All Chairs</h2>
+      <p class="section-sub">{{ Items|list|length }} items available</p>
+    </div>
+    {% if session.get('email') %}
+    <div style="display:flex;gap:8px;">
+      <a class="btn btn-outline" href="/chairs/category/new">➕ New Category</a>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if Items %}
+  <!-- CHAIR GRID -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;">
+    {% for item in Items %}
+    <div style="background:#fff;border-radius:16px;border:1px solid rgba(44,44,58,0.1);box-shadow:0 2px 12px rgba(44,44,58,0.06);overflow:hidden;transition:all 0.25s;cursor:pointer;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(44,44,58,0.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 12px rgba(44,44,58,0.06)'">
+
+      <!-- IMAGE -->
+      <a href="/chairs/category/{{ item.chair_id }}/items/{{ item.item_id }}">
+        <div style="width:100%;height:180px;background:#F4F2EE;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+          {% if item.item_image and item.item_image.startswith('http') %}
+            <img src="{{ item.item_image }}" alt="{{ item.item_name }}" style="width:100%;height:100%;object-fit:cover;"/>
+          {% else %}
+            <span style="font-size:72px;">🪑</span>
+          {% endif %}
+          <div style="position:absolute;top:10px;left:10px;background:#4A7FA5;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;">NEW</div>
+        </div>
+      </a>
+
+      <!-- BODY -->
+      <div style="padding:18px;">
+        <div style="font-size:11px;font-weight:700;color:#4A7FA5;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;">{{ item.item_brand }}</div>
+        <a href="/chairs/category/{{ item.chair_id }}/items/{{ item.item_id }}">
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#2C2C3A;margin-bottom:5px;">{{ item.item_name }}</div>
+        </a>
+        <div style="font-size:12px;color:#9B9BAA;margin-bottom:12px;">{{ item.item_weight }} kg</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#4A7FA5;">${{ item.item_price }}</div>
+          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:#D8EEE8;color:#3A7A64;">In Stock</span>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <a class="btn btn-primary" style="flex:1;justify-content:center;" href="/chairs/category/{{ item.chair_id }}/items/{{ item.item_id }}">View Details</a>
+          {% if session.get('email') %}
+          <a class="btn btn-outline btn-sm" href="/chairs/category/{{ item.chair_id }}/items/{{ item.item_id }}/edit">✏️</a>
+          <a class="btn btn-danger btn-sm" href="/chairs/category/{{ item.chair_id }}/items/{{ item.item_id }}/delete" onclick="return confirm('Delete this item?')">🗑️</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="empty">
+    <div class="empty-icon">🪑</div>
+    <div class="empty-title">No chairs yet!</div>
+    <div class="empty-sub">Be the first to add a chair to the catalog.</div>
+    {% if session.get('email') %}
+    <a class="btn btn-primary btn-lg" href="/chairs/category/new">➕ Add First Category</a>
+    {% else %}
+    <a class="btn btn-primary btn-lg" href="/login">🔐 Sign In to Add Items</a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+</div>
 {% endblock %}

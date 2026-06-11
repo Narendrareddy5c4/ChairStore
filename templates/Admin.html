@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel{% endblock %}
+{% block content %}
+<div class="admin-wrap">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div style="padding:20px;border-bottom:1px solid rgba(44,44,58,0.1);margin-bottom:12px;">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:#2C2C3A;">⚙️ Admin Panel</div>
+      <div style="font-size:12px;color:#6B6B80;margin-top:3px;">{{ session['email'].split('@')[0]|capitalize }}</div>
+    </div>
+    <div class="sidebar-group-title">Manage</div>
+    <a class="sidebar-link active" href="/admin"><span class="sidebar-icon">📊</span> Dashboard</a>
+    <a class="sidebar-link" href="/chairs/categorylist"><span class="sidebar-icon">📂</span> Categories</a>
+    <a class="sidebar-link" href="/"><span class="sidebar-icon">🪑</span> All Items</a>
+    <a class="sidebar-link" href="/chairs/recentitems"><span class="sidebar-icon">🕐</span> Recent Items</a>
+    <div class="sidebar-group-title" style="margin-top:12px;">Add New</div>
+    <a class="sidebar-link" href="/chairs/category/new"><span class="sidebar-icon">➕</span> New Category</a>
+    <div class="sidebar-group-title" style="margin-top:12px;">API</div>
+    <a class="sidebar-link" href="/chairs/all.json" target="_blank"><span class="sidebar-icon">🔌</span> All Items JSON</a>
+    <a class="sidebar-link" href="/chairs/category/json" target="_blank"><span class="sidebar-icon">📋</span> Categories JSON</a>
+    <div style="margin-top:auto;padding:20px;border-top:1px solid rgba(44,44,58,0.1);margin-top:24px;">
+      <a class="btn btn-danger btn-sm" style="width:100%;justify-content:center;" href="/logout">🚪 Sign Out</a>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div style="margin-bottom:28px;">
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:#2C2C3A;">Good day, {{ session['email'].split('@')[0]|capitalize }}! 👋</h1>
+      <p style="font-size:14px;color:#6B6B80;margin-top:4px;">Manage your ChairStore listings from here.</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📂</div>
+        <div class="stat-val" style="color:#4A7FA5;">{{ categories|length }}</div>
+        <div class="stat-label">Total Categories</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🪑</div>
+        <div class="stat-val" style="color:#3A7A64;">{{ items|length }}</div>
+        <div class="stat-label">Total Items</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👤</div>
+        <div class="stat-val" style="color:#7A5A94;">Active</div>
+        <div class="stat-label">Account Status</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔌</div>
+        <div class="stat-val" style="color:#C4855A;">3</div>
+        <div class="stat-label">API Endpoints</div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div style="background:#fff;border-radius:16px;border:1px solid rgba(44,44,58,0.1);padding:24px;margin-bottom:24px;box-shadow:0 2px 8px rgba(44,44,58,0.05);">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#2C2C3A;margin-bottom:16px;">⚡ Quick Actions</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn btn-primary" href="/chairs/category/new">➕ New Category</a>
+        <a class="btn btn-success" href="/">🪑 View All Items</a>
+        <a class="btn btn-outline" href="/chairs/categorylist">📂 Manage Categories</a>
+        <a class="btn btn-ghost" href="/chairs/all.json" target="_blank">🔌 View JSON API</a>
+      </div>
+    </div>
+
+    <!-- CATEGORIES TABLE -->
+    <div style="margin-bottom:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:#2C2C3A;">📂 Your Categories</div>
+        <a class="btn btn-primary btn-sm" href="/chairs/category/new">➕ Add New</a>
+      </div>
+      {% if categories %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>#</th><th>Category Name</th><th>Actions</th></tr></thead>
+          <tbody>
+            {% for cat in categories %}
+            <tr>
+              <td style="color:#9B9BAA;">{{ cat.chair_id }}</td>
+              <td><div style="font-weight:600;">{{ cat.chair_name }}</div></td>
+              <td>
+                <div class="tbl-actions">
+                  <a class="btn btn-outline btn-sm" href="/chairs/category/{{ cat.chair_id }}/items">👁 View</a>
+                  <a class="btn btn-ghost btn-sm" href="/chairs/category/{{ cat.chair_id }}/edit">✏️ Edit</a>
+                  <a class="btn btn-danger btn-sm" href="/chairs/category/{{ cat.chair_id }}/delete" onclick="return confirm('Delete this category and all its items?')">🗑️</a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty"><div class="empty-icon">📂</div><div class="empty-title">No categories yet</div><a class="btn btn-primary" href="/chairs/category/new">➕ Create First Category</a></div>
+      {% endif %}
+    </div>
+
+    <!-- API ENDPOINTS -->
+    <div style="background:#fff;border-radius:16px;border:1px solid rgba(44,44,58,0.1);padding:24px;box-shadow:0 2px 8px rgba(44,44,58,0.05);">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#2C2C3A;margin-bottom:16px;">🔌 API Endpoints</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="background:#F8F6F2;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#3A6E94;font-weight:600;">GET /chairs/category/json</div><div style="font-size:12px;color:#6B6B80;margin-top:3px;">All categories as JSON</div></div>
+          <a class="btn btn-outline btn-sm" href="/chairs/category/json" target="_blank">Try It →</a>
+        </div>
+        <div style="background:#F8F6F2;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#3A7A64;font-weight:600;">GET /chairs/all.json</div><div style="font-size:12px;color:#6B6B80;margin-top:3px;">All chairs as JSON</div></div>
+          <a class="btn btn-success btn-sm" href="/chairs/all.json" target="_blank">Try It →</a>
+        </div>
+        <div style="background:#F8F6F2;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7A5A94;font-weight:600;">GET /chairs/category/{`{id}`}/items.json</div><div style="font-size:12px;color:#6B6B80;margin-top:3px;">Items in a specific category</div></div>
+          <span class="badge badge-purple">Dynamic</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

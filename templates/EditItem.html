@@ -1,47 +1,46 @@
-{% extends 'HomePage.html' %}
+{% extends "base.html" %}
+{% block title %}Edit Chair{% endblock %}
 {% block content %}
-<div class="container">
-  <h3 style="color: orange;">Edit Item</h1> <a href="{{url_for('removeitem',categoryid = catid,itemid=iid)}}"><h4 align="right">Delete Item</h4></a><br>
-  <form method="post" action="{{url_for('itemupdate',categoryid = catid,itemid=iid)}}">
-    <div class="form-group">
-      <label>Name :</label>
-      <input type="text" class="form-control" id="email"  name="chairname" value='{{chairname}}' required>
-    </div>
-    <div class="form-group">
-      <label>Image :</label>
-      <input type="text" class="form-control" value="{{chairimage}}" required name="chairimage">
-    </div>
-    <div class="form-group">
-      <label>Price :</label>
-      <input type="text" class="form-control" value="{{chairprice}}" required name="chairprice">
-    </div>
-    <div class="form-group">
-      <label>Weight :</label>
-      <input type="text" class="form-control" value="{{chairweight}}" required name="chairweight">
-    </div>
-    <div class="form-group">
-      <label>Brand :</label>
-      <input type="text" class="form-control" value="{{chairbrand}}" required name="chairbrand">
-    </div>
-    <div class="container">
-      <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-success">
-      Edit Item
-      </button>
-      <div class="modal" id="myModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Click here to edit item</h4>
-              <button type="button" class="close" data-dismiss="modal"></button>
-            </div>
-            <div class="modal-footer">
-        	    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button> 
-	            <input type="submit"  class="btn btn-success"value="Edit Item">
-            </div>
-          </div>
+<div class="section" style="max-width:700px;">
+  <div class="breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span>Edit Chair</div>
+  <div class="form-wrap">
+    <div style="font-size:36px;margin-bottom:14px;">✏️</div>
+    <div class="form-title">Edit Chair Listing</div>
+    <div class="form-sub">Update the details of this chair listing.</div>
+    <form method="POST" action="/chairs/category/{{ catid }}/items/{{ iid }}/edit">
+      <div class="form-group">
+        <label class="form-label">Chair Name *</label>
+        <input class="form-input" type="text" name="chairname" value="{{ chairname }}" required autofocus/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Price ($) *</label>
+          <input class="form-input" type="number" name="chairprice" value="{{ chairprice }}" min="0" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Weight (kg) *</label>
+          <input class="form-input" type="number" name="chairweight" value="{{ chairweight }}" min="0" step="0.1" required/>
         </div>
       </div>
-    </div>
-  </form>
+      <div class="form-group">
+        <label class="form-label">Brand *</label>
+        <input class="form-input" type="text" name="chairbrand" value="{{ chairbrand }}" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Image URL</label>
+        <input class="form-input" type="url" name="chairimage" value="{{ chairimage }}"/>
+        {% if chairimage %}
+        <div style="margin-top:10px;display:flex;align-items:center;gap:10px;">
+          <img src="{{ chairimage }}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid rgba(44,44,58,0.1);" onerror="this.style.display='none'"/>
+          <span style="font-size:12px;color:#6B6B80;">Current image</span>
+        </div>
+        {% endif %}
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary btn-lg" type="submit">💾 Save Changes</button>
+        <a class="btn btn-ghost btn-lg" href="/">Cancel</a>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}
